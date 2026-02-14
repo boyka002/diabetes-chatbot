@@ -30,22 +30,6 @@ The assistant structures guidance around:
 
 When a user asks a vague question (e.g., “What should I eat?”), the bot gathers missing context (recent meal, glucose, activity) before responding with tailored guidance.
 
-## System Design
-
-```mermaid
-flowchart LR
-  UI[Next.js Frontend] -->|POST /api/chat| API[Next.js API Route]
-  API -->|Prompt + History| LLM[Ollama API]
-  LLM -->|Streaming Tokens| API
-  API -->|Text Stream| UI
-
-  %% Optional / not used in this prototype
-  IMG[Image Generation
-(Not implemented)]:::dashed
-
-  classDef dashed stroke-dasharray: 5 5,stroke:#999,color:#555;
-```
-
 **Notes:**
 - LLM integration is self‑hosted through Ollama (no third‑party hosted APIs).
 
