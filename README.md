@@ -81,5 +81,4 @@ OLLAMA_MODEL
 
 <img width="2896" height="1118" alt="image" src="https://github.com/user-attachments/assets/84e1e9f6-5431-474f-bbef-212325485dcf" />
 
-
-![Streaming Response](docs/screenshots/streaming-response.png)
+<img width="2910" height="1606" alt="image" src="https://github.com/user-attachments/assets/089ee213-a916-4012-ac86-5e8c23b76786" />
