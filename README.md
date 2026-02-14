@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Diabetes Self-Management Chatbot (ADCES7)
 
-## Getting Started
+AI-powered chatbot prototype for diabetes self‑management grounded in the ADCES7 Self‑Care Behaviors. Built with Next.js and a self‑hosted LLM via Ollama, with streaming responses and proactive context gathering.
 
-First, run the development server:
+## Live Demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- https://diabeties-chatbot.fly.dev
+
+## Source Code
+
+- (Add repository URL here)
+
+## Chosen Diabetes Stage
+
+**Type 2 Diabetes Diagnosis**
+
+**Rationale:** The bot’s tone and guidance are calibrated for newly diagnosed or early‑stage Type 2 users. It focuses on practical, low‑friction behavior changes and builds confidence through small, actionable steps. This matches the onboarding‑style experience of a first‑time self‑management program.
+
+## ADCES7 Alignment
+
+The assistant structures guidance around:
+
+- Healthy Eating
+- Being Active
+- Monitoring
+- Taking Medication
+- Problem Solving
+- Healthy Coping
+- Reducing Risks
+
+When a user asks a vague question (e.g., “What should I eat?”), the bot gathers missing context (recent meal, glucose, activity) before responding with tailored guidance.
+
+## System Design
+
+```mermaid
+flowchart LR
+  UI[Next.js Frontend] -->|POST /api/chat| API[Next.js API Route]
+  API -->|Prompt + History| LLM[Ollama API]
+  LLM -->|Streaming Tokens| API
+  API -->|Text Stream| UI
+
+  %% Optional / not used in this prototype
+  IMG[Image Generation
+(Not implemented)]:::dashed
+
+  classDef dashed stroke-dasharray: 5 5,stroke:#999,color:#555;
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Notes:**
+- LLM integration is self‑hosted through Ollama (no third‑party hosted APIs).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Socratic State Management Strategy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Session tracking:** `lib/session.ts` maintains an in‑memory session map keyed by `x-session-id`.
+- **Context extraction:** User messages are parsed for glucose values, meals, activity, medication, stress, and goals.
+- **History trimming:** Only the most recent 8 messages are retained to control token usage.
+- **Socratic prompts:** `lib/promptBuilders.ts` generates follow‑up questions when essential context is missing.
 
-## Learn More
+## Performance & Optimization
 
-To learn more about Next.js, take a look at the following resources:
+- **Streaming responses:** API streams tokens to the client for low latency perceived output.
+- **Token management:** Message history is trimmed and user snippets are truncated.
+- **Efficient UI:** Minimal client state and simple component tree for fast render.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Chatbot (Fly.io)
 
-## Deploy on Vercel
+Environment variables:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+OLLAMA_URL
+OLLAMA_MODEL
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Ollama (AWS EC2)
+
+- Public endpoint accessible from the chatbot host.
+- `gemma3:1b` model pulled and ready.
+
+## SonarQube (Maintainability Focus)
+
+- Use SonarQube/SonarCloud to analyze code quality, duplication, and maintainability.
+
+## Architecture Document Checklist (Per Requirements)
+
+- Diabetes stage + personality rationale (above)
+- System design diagram (above)
+- Socratic state management strategy (above)
+- SonarQube report link/PDF (add below)
+
+**SonarQube Report:**
+- (<img width="1470" height="956" alt="Screenshot 2026-02-14 at 9 59 31 AM" src="https://github.com/user-attachments/assets/69c3a051-a14c-4a4e-b084-6beb348000e0" />
+
+
+## Screenshots
+
+<img width="2896" height="1118" alt="image" src="https://github.com/user-attachments/assets/84e1e9f6-5431-474f-bbef-212325485dcf" />
+
+
+![Streaming Response](docs/screenshots/streaming-response.png)
