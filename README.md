@@ -8,7 +8,7 @@ AI-powered chatbot prototype for diabetes self‑management grounded in the ADCE
 
 ## Source Code
 
-- (Add repository URL here)
+- https://github.com/boyka002/diabetes-chatbot
 
 ## Chosen Diabetes Stage
 
